@@ -44,11 +44,11 @@ while True:
             if a_file.endswith(extention): # 파일 확장자가 입력과 동일한 경우
                 file_list.append(a_file) # 확장자가 동일한 파일이름은 리스트에 추가
 
-                a_folder = a_file[start_num - 1:end_num] # 파일명에서 중복된 영역이 폴더명
-                if a_folder == "": # 빈 파일명은 추가하지 않음
+                folder_str = a_file[start_num - 1:end_num] # 파일명에서 중복된 영역이 폴더명
+                if folder_str == "": # 빈 파일명은 추가하지 않음
                     pass
                 else: # 비어있지 않다면 폴더명리스트에 추가
-                    folder_set.add(a_folder)
+                    folder_set.add(folder_str)
                 
         #%% 폴더 리스트 CRUD
         folder_list = list(folder_set)
@@ -68,25 +68,37 @@ while True:
 # working on
 # 튜플 -> 세트 -> 리스트
 
-folder_set2 = set() # 추가, 제거를 위한 폴더명 집합 사용
 
 while True:
+    folder_set2 = set() # 추가, 제거를 위한 폴더명 집합 사용
+
     # 사용자가 확인 할 때까지 세트 요소 수정
     if user_confirm == '0':
         break
     
     elif user_confirm == '1':
-        a_folder = input("추가할 파일명 : ")
-        if len(a_folder) == 0:
-            pass
-        else :
-            folder_set.add(a_folder)
+        folder_str = input("추가할 파일명 (여러개의 경우 '/(슬래시)'로 구분)\n : ")
+        folder_list = folder_str.split('/')
+        
+        for i in range(len(folder_list)):
+            if len(folder_list[i]) == 0:
+                pass
+            else :
+                folder_set2.add(folder_list[i])
+        
+        folder_set += folder_set2
 
     elif user_confirm == '2':
-        a_folder = input("삭제할 파일명 : ")
-        folder_set2 = set(a_folder)
-        folder_set2 = folder_set2 - {',', ' '}
-        folder_set.union(folder_set2)
+        folder_str = input("삭제할 파일명 (여러개의 경우 '/(슬래시)'로 구분)\n : ")
+        folder_list = folder_str.split('/')
+        
+        for i in range(len(folder_list)):
+            if len(folder_list[i]) == 0:
+                pass
+            else :
+                folder_set2.add(folder_list[i])
+        
+        folder_set -= folder_set2
 
     else:
         print("0, 1, 2 중에서 선택해주세요")
