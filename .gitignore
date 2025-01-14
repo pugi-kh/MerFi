@@ -6,3 +6,5 @@ build/
 dist/
 *.spec
 
+# 코드 확인을 위한 연습장
+test.py
