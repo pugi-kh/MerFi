@@ -32,7 +32,8 @@ while True:
         extention = input("확장자명(모든파일은 Enter!) : ")
 
         #%% 역슬래시를 슬래시로 변경해서 출력
-        user_path = user_path.replace('\\','/')
+        user_path = user_path.replace('\\','/') + '/'
+        user_path = user_path.replace('//', '/')
         #====================================================
 
         #%% 경로 내 파일명 리스트화
@@ -114,18 +115,24 @@ print("\n파일 정리를 시작합니다...잠시만 기다려 주세요...\n")
 #%% 파일 이동 MoveFiles 함수 적용
 for i in range(len(folder_list)): # 폴더 개수만큼 수행
     # os.mkdir(user_path + folder_list[i]) # 옮길 폴더 생성
-    # 폴더가 기존에 있는지 확인하고 있으면 건너뛰기
+    # 생성하려는 폴더명이 기존에 없을 경우에만 생성성
     if not os.path.exists(user_path + folder_list[i]):
         os.makedirs(user_path + folder_list[i])
     
+    #============================================================
+    #============================================================
+    #============================================================
+    #============================================================
     # 파일중에서 이름이 겹치긴 하는데 위치가 다른 경우 제외
-    li = [s for s in file_list if folder_list[i] in s and folder_list[i] == s[start_num - 1 : end_num]] # 옮길 파일 리스트
+    # 이부분 어떻게 할지 고민
+    # li = [s for s in file_list if folder_list[i] in s and folder_list[i] == s[start_num - 1 : end_num]] # 해당 위치의 값도 동일할 경우
+    li = [s for s in file_list if folder_list[i] in s] # 문자만 포함해도 묶음
     li.sort()
     
-    # 튜플 등으로 한번에 이동이 가능한지 확인 필요요
+    # 튜플 등으로 한번에 이동이 가능한지 확인 필요...
     while True: 
-        current_path = (user_path + li[0])
-        new_path = (user_path + folder_list[i] + '/' + li[0])
+        current_path = (user_path + li[0]) # 리스트의 첫번째 파일 현재 주소
+        new_path = (user_path + folder_list[i] + '/' + li[0]) # 이동할 파일의 주소
         if len(li) < 2:
             shutil.move(current_path, new_path)
             break
