@@ -4,3 +4,13 @@
 
 ** 이후 작업
 겹치는 파일 이름의 위치까지 동일해야 합칠 것인지...
+
+기본적으로 위치는 안맞아도 합치는걸로 작업
+
+공백이 잘렸을 가능성이 있으므로
+a_file[ start_num - 1 : end_num ].strip()
+이것과 동일한지 확인
+
+for a_file in file_list:
+    if a_file[ start_num - 1 : end_num ].strip() in folder_list:
+        
