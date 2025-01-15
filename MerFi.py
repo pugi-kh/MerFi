@@ -16,9 +16,9 @@ import shutil
 import time
 
 
-print("정리할 파일들이 있는 폴더의 경로를 입력해주세요")
-user_path = input(r"폴더 경로 : ")
-extention = input("확장자명(모든파일은 Enter!) : ")
+print("~ 정리할 파일들이 있는 폴더의 경로를 입력해주세요 ~")
+user_path = input(r">> ")
+extention = input("\n~ 확장자명 ~\n(모든파일은 Enter!)\n>> ")
 
 # 폴더 경로를 파이썬에서 사용 가능하도록 정리
 user_path = user_path.replace('\\','/') + '/'
@@ -35,19 +35,14 @@ for a_file in file_list:
 
 
 # 이후 범위를 지정할 것인지, 폴더명을 입력할 것인지 확인
-print("중복되는 파일명을 폴더로 생성합니다.")
+print("\n~ 중복되는 파일명을 폴더로 생성합니다. ~")
 print("  1. 범위를 지정하여 폴더명 추출")
 print("  2. 직접 중복되는 문자 입력해서 폴더명 생성")
-
 user_confirm = input(">> ")
 
 
 folder_set = set() # 폴더명을 세트로 만들어서 중복제거
 folder_temp = set() # 추가, 제거거를 위한 폴더명 집합 사용
-
-#%% 임시 입력값 지정
-user_confirm = '1'
-
 #%% 사용자가 확인 할 때까지 세트 요소 수정
 while True:
 
@@ -56,18 +51,20 @@ while True:
 
         folder_set = set() # 폴더세트 초기화
         while True:
-            print("\n파일명에서 \"몇번째 자리부터\" \"몇번째 자리까지\" \n를 추출해서 폴더명으로 지정할까요요?\n(모르겠으면 \"?\"입력)")
+            print("\n~ 파일명에서 \"몇번째 자리부터\" \"몇번째 자리까지\" 폴더명으로 지정할까요? ~\n")
             # 하나의 파일을 가져와서 자리수 확인 -> 위 리스트에서?
             # 사용자가 파일명 입력하고 자리수 확인해도 좋을 듯 -> 직접 추가로 입력
-            start_num = input("몇번째 자리부터 : ")
+            start_num = input("몇번째 자리부터 (모르겠으면 \"?\"입력)\n>> ")
+            if not start_num:
+                continue
             if start_num == "?":
                 for_check = input("파일명 붙여넣기\n>> ")
-                num_check = [str(i).zfill(2) for i in range(1, len(for_check))]
-                print(" / ".join(num_check))
-                print("  / ".join([i for i in for_check]))
+                for i in range(len(for_check)):
+                    print(f"    {for_check[i]} \t:  ", end ="")
+                    print(str(i+1).zfill(2), end = "\n")
                 continue # 여기에 파일명 입력하고 범위번호 확인하는 부분분
             else: 
-                end_num = int(input("몇번째 자리까지 : "))
+                end_num = int(input("몇번째 자리까지\n>> "))
                 start_num = int(start_num)
                 break
 
@@ -75,13 +72,14 @@ while True:
         for a_file in file_list: # 파일명 하나씩 출력
             a_folder = a_file[start_num - 1:end_num] # 파일명에서 중복된 영역이 폴더명
             a_folder = a_folder.strip()
-            if not a_folder: # 빈 값이 아니라면 폴더명 세트에 추가
+            if a_folder: # 빈 값이 아니라면 폴더명 세트에 추가
                 folder_set.add(a_folder)
 
 # 메뉴 2) 폴더명 추가 부분
     if user_confirm == '2':
 
-        print("추가할 파일명 입력 (여러개의 경우 \"/\"슬래시로 구분)")
+        print("~ 추가할 파일명 입력 ~")
+        print("(여러개의 경우 \"/\"슬래시로 구분)")
         print("(대소문자 주의)")
         a_folder = input(">> ")
         folder_list = a_folder.split('/')
@@ -94,6 +92,7 @@ while True:
                 folder_temp.add(folder_list[i])
         
         folder_set = folder_set.union(folder_temp)
+        folder_temp = set() # 임시세트 초기화
 
 # 메뉴 3) 폴더명 삭제 부분
     if user_confirm == '3':
@@ -107,21 +106,23 @@ while True:
                 folder_list[i] = folder_list[i].strip()
                 folder_temp.add(folder_list[i])
         
-        folder_set = folder_set.difference(folder_temp)
+        folder_set = folder_set - folder_temp
+        folder_temp = set() # 임시세트 초기화화
 
 # 번호 잘못 입력
     if user_confirm not in {'0', '1', '2', '3'}:
 
-        print("0, 1, 2, 3 중에서 선택해주세요")
+        print("다시 입력해주세요")
         time.sleep(0.5)
         user_confirm = input(">> ")
 
 # 폴더 리스트 출력, 사용자 확인인
-    if user_confirm in {'1', '2', '3'}:
+    elif user_confirm in {'1', '2', '3'}:
 
         folder_list = list(folder_set)
         folder_list.sort()
         # 생성된 폴더명 출력
+        '''
         #======================================
         # for i in range(len(folder_list)):
         #     print(folder_list[i], end = "")
@@ -129,6 +130,7 @@ while True:
         #         print(" / ", end = "")
         #======================================
         # .join을 활용해서 리스트를 " / "로 연결해서 출력하면 되는구나..
+        '''
         print()
         print(" / ".join(folder_list))
         print()
@@ -136,7 +138,7 @@ while True:
         print("위 목록대로 폴더를 생성합니다.\n")
         time.sleep(0.5)
         print("0. 확인완료(작업진행)\n1. 범위 다시지정\n2. 추가\n3. 삭제")
-        user_confirm = int(input("\n입력 : "))
+        user_confirm = input("\n>> ")
 
     # 폴더명 추가 혹은 삭제시, 대소문자를 구문해서 작성해야 하며
     # 프로그램이 원활히 동작하지 않을 수 있음.
