@@ -45,7 +45,6 @@ folder_set = set() # 폴더명을 세트로 만들어서 중복제거
 folder_temp = set() # 추가, 제거거를 위한 폴더명 집합 사용
 #%% 사용자가 확인 할 때까지 세트 요소 수정
 while True:
-
 # 메뉴 1) 사용자로부터 입력받기기
     if user_confirm == '1':
 
@@ -54,11 +53,9 @@ while True:
             print("\n~ 파일명에서 \"몇번째 자리부터\" \"몇번째 자리까지\" 폴더명으로 지정할까요? ~\n")
             # 하나의 파일을 가져와서 자리수 확인 -> 위 리스트에서?
             # 사용자가 파일명 입력하고 자리수 확인해도 좋을 듯 -> 직접 추가로 입력
-            start_num = input("몇번째 자리부터 (모르겠으면 \"?\"입력)\n>> ")
+            start_num = input("몇번째 자리부터 (모르겠으면 Enter)\n>> ")
             if not start_num:
-                continue
-            if start_num == "?":
-                for_check = input("파일명 붙여넣기\n>> ")
+                for_check = input("자리수 확인할 파일명 붙여넣기\n>> ")
                 for i in range(len(for_check)):
                     print(f"    {for_check[i]} \t:  ", end ="")
                     print(str(i+1).zfill(2), end = "\n")
@@ -143,7 +140,7 @@ while True:
     # 폴더명 추가 혹은 삭제시, 대소문자를 구문해서 작성해야 하며
     # 프로그램이 원활히 동작하지 않을 수 있음.
 # 사용자 확인시 다음 작업 진행행
-    if user_confirm == '0':
+    else : # user_confirm == '0':
         break
 print("\n파일 정리를 시작합니다...잠시만 기다려 주세요...\n")
 # 여기까지 폴더명 정리 완료
@@ -160,19 +157,26 @@ for i in range(len(folder_list)): # 폴더 개수만큼 수행
     # 파일중에서 이름이 겹치긴 하는데 위치가 다른 경우 제외?
     # 이부분 어떻게 할지 고민
     # li = [s for s in file_list if folder_list[i] in s and folder_list[i] == s[start_num - 1 : end_num]] 
-    li = [s for s in file_list if folder_list[i] in s] # 문자를 포함하기만 하면
+    li = [s for s in file_list if folder_list[i] in s] 
+    # 문자를 포함하기만 하면
     li.sort() # 문자를 포함하는 리스트를 만든 후
     
     # 튜플 등으로 한번에 이동이 가능한지 확인 하면 좋지 않을까
-    while True: 
-        current_path = (user_path + li[0]) # 리스트의 첫번째 파일 현재 주소
-        new_path = (user_path + folder_list[i] + '/' + li[0]) # 이동할 파일의 주소
-        if len(li) < 2:
-            shutil.move(current_path, new_path)
-            break
+    for fname in li:
+        current_path = (user_path + fname) # 리스트의 첫번째 파일 현재 주소
+        new_path = (user_path + folder_list[i] + '/' + fname) # 이동할 파일의 주소
         shutil.move(current_path, new_path)
-        li = li[1:]
+    
+    # while True: 
+    #     current_path = (user_path + li[0]) # 리스트의 첫번째 파일 현재 주소
+    #     new_path = (user_path + folder_list[i] + '/' + li[0]) # 이동할 파일의 주소
+    #     if len(li) < 2:
+    #         shutil.move(current_path, new_path)
+    #         break
+    #     shutil.move(current_path, new_path)
+    #     li = li[1:]
 # 2개의 폴더명을 모두 포함하는 파일이 있으면 오류가 나지 않을까?
+    file_list = [x for x in file_list if x not in li] # 이동한 파일은 리스트에서 제외외
 
 print("정리가 완료되었습니다. 감사합니다.")
 time.sleep(3)
