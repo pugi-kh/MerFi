@@ -42,7 +42,7 @@ user_confirm = input(">> ")
 
 
 folder_set = set() # 폴더명을 세트로 만들어서 중복제거
-folder_temp = set() # 추가, 제거거를 위한 폴더명 집합 사용
+folder_temp = set() # 추가, 제거거를 위한 폴더명 집합 사용 -> 함수 적용 후에는 삭제
 #%% 사용자가 확인 할 때까지 세트 요소 수정
 while True:
 # 메뉴 1) 사용자로부터 입력받기기
@@ -75,36 +75,52 @@ while True:
 # 메뉴 2) 폴더명 추가 부분
     if user_confirm == '2':
 
-        print("~ 추가할 파일명 입력 ~")
+        print("~ 추가할 ", end = "")
+        #=========================================================================
+        # 함수로 만들어서 적용
+        print("파일명 입력 ~")
         print("(여러개의 경우 \"/\"슬래시로 구분)")
         print("(대소문자 주의)")
         a_folder = input(">> ")
         folder_list = a_folder.split('/')
 
-# 추후에 함수로 만들어서 적용?
+        # folder_temp = set()
+
         for i in range(len(folder_list)): # folder_list 서식 맞추기, 정리
             # 폴더명 작성시 잘못 작성된 부분 삭제
             if len(folder_list[i]) > 0 : 
                 folder_list[i] = folder_list[i].strip()
                 folder_temp.add(folder_list[i])
+        # return folder_temp
+        #=========================================================================
         
         folder_set = folder_set.union(folder_temp)
-        folder_temp = set() # 임시세트 초기화
+        folder_temp = set() # 임시세트 초기화 -> 함수 적용 후에는 삭제
 
 # 메뉴 3) 폴더명 삭제 부분
     if user_confirm == '3':
 
-        a_folder = input("삭제할 파일명 (여러개의 경우 '/(슬래시)'로 구분)\n : ")
+        a_folder = input("삭제할 ", end = "")
+        #=========================================================================
+        # 함수로 만들어서 적용
+        print("파일명 입력 ~")
+        print("(여러개의 경우 \"/\"슬래시로 구분)")
+        print("(대소문자 주의)")
+        a_folder = input(">> ")
         folder_list = a_folder.split('/')
-        
+
+        # folder_temp = set()
+
         for i in range(len(folder_list)): # folder_list 서식 맞추기, 정리
             # 폴더명 작성시 잘못 작성된 부분 삭제
             if len(folder_list[i]) > 0 : 
                 folder_list[i] = folder_list[i].strip()
                 folder_temp.add(folder_list[i])
+        # return folder_temp
+        #=========================================================================
         
         folder_set = folder_set - folder_temp
-        folder_temp = set() # 임시세트 초기화화
+        folder_temp = set() # 임시세트 초기화 -> 함수 적용 후에는 삭제
 
 # 번호 잘못 입력
     if user_confirm not in {'0', '1', '2', '3'}:
