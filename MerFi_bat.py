@@ -38,16 +38,18 @@ while user_confirm:
 
 f = open("MerFi.bat", 'w', encoding = "ANSI")
 
+f.write("@Echo off\n")
+
 for s in folder_list:
     f.write(f"mkdir \"{s}\"\n")
     f.write(f"move *\"{s}\"*\"{ext}\" \"{s}\"\n")
     f.write(f"rmdir \"{s}\"\n")
 
 f.close()
+
 print("\n=================================\n")
 print("파일 생성이 완료되었습니다.\n")
 print("\"MerFi.bat\" 파일을 \n정리할 폴더 내에서 실행하면 \n파일 정리가 진행됩니다.")
-
 print("\n감사합니다.")
 print("\n=================================")
 print("\n" * 10)
